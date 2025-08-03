@@ -1,22 +1,85 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>SMP ABCD N1 Pati</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>███ LOADING ███</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      color: #0f0;
+      font-family: monospace;
+      overflow: hidden;
+      user-select: none;
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    .glitch-text {
+      position: absolute;
+      font-size: 12px;
+      color: lime;
+      animation: flicker 0.2s infinite;
+      white-space: nowrap;
+    }
+    @keyframes flicker {
+      0%   { opacity: 1; transform: scale(1); }
+      50%  { opacity: 0.3; transform: scale(1.2); }
+      100% { opacity: 1; transform: scale(0.9); }
+    }
+  </style>
 </head>
 <body>
-<header>
-  <h1>SMP ABCD N1 Pati</h1>
-</header>
-<nav>
-  <a href="index.html">Home</a>
-  <a href="galeri.html">Galeri</a>
-  <a href="kontak.html">Kontak</a>
-  <a href="admin.html">Admin</a>
-</nav>
-<div class="container">
-  <h2>Selamat Datang di Website Resmi SMP ABCD N1 Pati</h2>
-  <p>Berita terbaru dan informasi sekolah akan ditampilkan di sini.</p>
-</div>
+
+<canvas id="noise"></canvas>
+
+<script>
+  const canvas = document.getElementById("noise");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  function drawNoise() {
+    const imageData = ctx.createImageData(canvas.width, canvas.height);
+    const buf = new Uint32Array(imageData.data.buffer);
+    for (let i = 0; i < buf.length; i++) {
+      buf[i] = Math.random() < 0.4 ? 0xff00ff00 : 0xff000000;
+    }
+    ctx.putImageData(imageData, 0, 0);
+  }
+
+  setInterval(drawNoise, 40);
+
+  function randomText() {
+    const chars = "█▓▒░<>/?!@#%^&*()-=+_~ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let txt = "";
+    for (let i = 0; i < 20; i++) {
+      txt += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return txt;
+  }
+
+  function spawnGlitch() {
+    const el = document.createElement("div");
+    el.className = "glitch-text";
+    el.style.left = Math.random() * window.innerWidth + "px";
+    el.style.top = Math.random() * window.innerHeight + "px";
+    el.textContent = randomText();
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3000);
+  }
+
+  setInterval(spawnGlitch, 50);
+
+  // Optional title flicker
+  setInterval(() => {
+    document.title = randomText().slice(0, 10);
+  }, 150);
+</script>
+
 </body>
 </html>
